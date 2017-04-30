@@ -1,35 +1,46 @@
 import csv
 import matplotlib.image as mpimg
 import numpy as np
+from keras.models import Sequential
+from keras.layers import Flatten, Dense, Lambda, Cropping2D, Convolution2D
+from keras.layers.pooling import MaxPooling2D
+from sklearn.model_selection import train_test_split
+from sklearn.utils import shuffle
 
 lines = []
-with open('../data/driving_log.csv') as csvfile:
-    reader = csv.reader(csvfile)
-    for line in reader:
-        lines.append(line)
 
-images = []
-measurements = []
-for line in lines:
-    source_path = line[0]
-    filename = source_path.split('/')[-1]
-    current_path = '../data/IMG/' + filename
-    image = mpimg.imread(current_path)
-    image_flipped = np.fliplr(image)
-    images.append(image)
-    images.append(image_flipped)
-    measurement = float(line[3])
-    measurement_flipped = -measurement
-    measurements.append(measurement)
-    measurements.append(measurement_flipped)
+with open('./data/driving_log.csv') as csvfile:
+  reader = csv.reader(csvfile)
+  for line in reader:
+      lines.append(line)
 
-X_train = np.array(images)
-y_train = np.array(measurements)
+train_lines, validation_lines = train_test_split(lines, test_size=0.2)
 
-from keras.models import Sequential
-from keras.layers import Flatten, Dense, Lambda, Cropping2D
-from keras.layers import Convolution2D
-from keras.layers.pooling import MaxPooling2D
+def generator(lines, batch_size=32):
+  num_lines = len(lines)
+  while 1:
+    shuffle(lines)
+    for offset in range(0, num_lines, batch_size):
+      batch_lines = lines[offset:offset+batch_size]
+      images = []
+      angles = []
+      for batch_sample in batch_lines:
+        name = './data/IMG/'+batch_sample[0].split('/')[-1]
+        center_image = mpimg.imread(name)
+        center_angle = float(batch_sample[3])
+        flipped_center_image = np.fliplr(center_image)
+        flipped_center_angle = -center_angle
+        images.append(center_image)
+        angles.append(center_angle)
+        images.append(flipped_center_image)
+        angles.append(flipped_center_angle)
+
+      X_train = np.array(images)
+      y_train = np.array(angles)
+      yield shuffle(X_train, y_train)
+
+train_generator = generator(train_lines, batch_size=32)
+validation_generator = generator(validation_lines, batch_size=32)
 
 model = Sequential()
 model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(160,320,3)))
@@ -45,6 +56,5 @@ model.add(Dense(50))
 model.add(Dense(10))
 model.add(Dense(1))
 model.compile(loss='mse', optimizer='adam')
-model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=10)
-
+model.fit_generator(train_generator, samples_per_epoch=len(train_lines), validation_data=validation_generator, nb_val_samples=len(validation_lines), nb_epoch=10)
 model.save('model.h5')
