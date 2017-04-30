@@ -1,4 +1,4 @@
-#**Behavioral Cloning** 
+#** Behavioral Cloning** 
 
 ## Writeup Template
 
@@ -6,7 +6,7 @@
 
 ---
 
-** Behavioral Cloning Project**
+** Behavioral Cloning Project **
 
 The goals / steps of this project are the following:
 * Use the simulator to collect data of good driving behavior
@@ -47,9 +47,9 @@ Training data was chosen to keep the vehicle driving on the road. I used the cen
 
 #### 1. Solution Design Approach
 
-After following the tutorial and implementing the Nvidia Archtecture, the car was predicting the angles pretty well. To improve and have the car be able to drive around the track without leaving the road, I had to crop the images, to get rid of parts of images that were irrelevant. On the top portion of the images, it capture big chunks of the sky, which I came up with the conclusion that it can be discarded and also the bottom portion of the image was made up with the hood of the car, which we discarded as well. 
+After following the tutorial and implementing the Nvidia Archtecture, the car was predicting the angles pretty well. To improve and have the car be able to drive around the track without leaving the road, I had to crop the images, to get rid of parts of images that were irrelevant. On the top portion of the images, it capture big chunks of the sky, which I came up with the conclusion that it can be discarded and also the bottom portion of the image was made up with the hood of the car, which I discarded as well. 
 
-We also normalized the images, and this significantly improved the results. Finally, we improved the overall data. The way we improved the data, was by driving around the track couple times, than driving around the track backwards couple of times, and finally recording data of turning sharp turns couple times as well. With these implementations, my car was able to drive around the track without leaving the road or crashing.  
+I also normalized the images, and this significantly improved the results. Finally, I improved the overall data. The way I improved the data, was by driving around the track couple times, than driving around the track backwards couple of times, and finally recording data of turning sharp turns couple times as well. With these implementations, my car was able to drive around the track without leaving the road or crashing.  
 
 #### 2. Final Model Architecture
 
