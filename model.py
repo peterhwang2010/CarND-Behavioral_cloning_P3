@@ -2,7 +2,7 @@ import csv
 import matplotlib.image as mpimg
 import numpy as np
 from keras.models import Sequential
-from keras.layers import Flatten, Dense, Lambda, Cropping2D, Convolution2D
+from keras.layers import Flatten, Dense, Lambda, Cropping2D, Convolution2D, Dropout
 from keras.layers.pooling import MaxPooling2D
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
@@ -55,8 +55,8 @@ model.add(Flatten())
 model.add(Dense(100))
 model.add(Dense(50))
 model.add(Dense(10))
-model.add(Dropout(0.5))
 model.add(Dense(1))
+model.summary()
 model.compile(loss='mse', optimizer='adam')
 model.fit_generator(train_generator, samples_per_epoch=len(train_lines), validation_data=validation_generator, nb_val_samples=len(validation_lines), nb_epoch=10)
 model.save('model.h5')
