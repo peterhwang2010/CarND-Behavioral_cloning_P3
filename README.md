@@ -1,6 +1,4 @@
-#** Behavioral Cloning** 
-
-## Writeup Template
+## Behavioral Cloning
 
 ### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
 
@@ -64,7 +62,6 @@ Small modification I made to the Nvidia architecture, I added drouput of 25% rig
 |dense_1 (Dense)                | (None, 50)                | 5050          |
 |dense_1 (Dense)                | (None, 10)                | 510           |
 |dense_1 (Dense)                | (None, 1)                 | 11            |
-:---------------------------------------------------------------------------:
 
 #### 2. Model parameter tuning
 
